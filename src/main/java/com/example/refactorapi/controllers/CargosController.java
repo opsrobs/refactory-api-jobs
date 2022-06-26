@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import com.example.refactorapi.services.CargosServices;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -33,5 +36,28 @@ public class CargosController {
         BeanUtils.copyProperties(cargosDto,cargosModel);
         System.err.println(cargosDto.toString() + " == " + cargosModel.toString());
         return ResponseEntity.status(HttpStatus.CREATED).body(cargosServices.save(cargosModel));
+    }
+@GetMapping
+    public ResponseEntity<List<CargosModels>> getAllCargos(){
+        return ResponseEntity.status(HttpStatus.OK).body(cargosServices.findAll());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getOneCargo(@PathVariable(value = "id")long id){
+        Optional<CargosModels> cargosModelsOptional = cargosServices.findById(id);
+        if (!cargosModelsOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cargo NÃO localizado");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(cargosModelsOptional.get());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteCargo(@PathVariable(value = "id")long id){
+        Optional<CargosModels> cargosModelsOptional = cargosServices.findById(id);
+        if (!cargosModelsOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cargo NÃO localizado");
+        }
+        cargosServices.delete(cargosModelsOptional.get());
+        return ResponseEntity.status(HttpStatus.OK).body("Cargo EXCLUIDO com sucesso!!!");
     }
 }

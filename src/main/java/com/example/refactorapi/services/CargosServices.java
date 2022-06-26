@@ -6,6 +6,8 @@ import com.example.refactorapi.repositories.CargosRepositorie;
 
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CargosServices {
@@ -23,5 +25,17 @@ public class CargosServices {
 
     public boolean existsByNomeCargo(String nomeCargo){
         return cargosRepositorie.existsByNomeCargo(nomeCargo);
+    }
+
+    public List<CargosModels> findAll() {
+    return cargosRepositorie.findAll();
+    }
+
+    public Optional<CargosModels> findById(long id) {
+        return cargosRepositorie.findById(id);
+    }
+    @Transactional
+    public void delete(CargosModels cargosModels) {
+        cargosRepositorie.delete(cargosModels);
     }
 }

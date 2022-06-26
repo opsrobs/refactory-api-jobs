@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface CargosRepositorie extends JpaRepository<CargosModels, UUID> {
+public interface CargosRepositorie extends JpaRepository<CargosModels, Long> {
 
     boolean existsByNomeCargo(String nomeCargo);
 

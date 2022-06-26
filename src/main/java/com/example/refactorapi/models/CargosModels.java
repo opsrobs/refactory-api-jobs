@@ -11,7 +11,7 @@ public class CargosModels implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID idcargos;
+    private long idcargos;
     @Column(nullable = false)
     private String nomeCargo;
     @Column(nullable = false)
@@ -22,7 +22,7 @@ public class CargosModels implements Serializable {
     public CargosModels() {
     }
 
-    public CargosModels(UUID idcargos, String nomeCargo, float valorMin, float valorMax) {
+    public CargosModels(long idcargos, String nomeCargo, float valorMin, float valorMax) {
         this.idcargos = idcargos;
         this.nomeCargo = nomeCargo;
         this.valorMin = valorMin;
@@ -35,11 +35,11 @@ public class CargosModels implements Serializable {
         this.valorMax = valorMax;
     }
 
-    public UUID getIdcargos() {
+    public long getIdcargos() {
         return idcargos;
     }
 
-    public void setIdcargos(UUID idcargos) {
+    public void setIdcargos(long idcargos) {
         this.idcargos = idcargos;
     }
 
