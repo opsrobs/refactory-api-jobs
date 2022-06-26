@@ -3,6 +3,10 @@ package com.example.refactorapi.controllers;
 import com.example.refactorapi.models.CargosModels;
 import com.example.refactorapi.models.dto.CargosDto;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +15,6 @@ import com.example.refactorapi.services.CargosServices;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -38,8 +41,9 @@ public class CargosController {
         return ResponseEntity.status(HttpStatus.CREATED).body(cargosServices.save(cargosModel));
     }
 @GetMapping
-    public ResponseEntity<List<CargosModels>> getAllCargos(){
-        return ResponseEntity.status(HttpStatus.OK).body(cargosServices.findAll());
+    public ResponseEntity<Page<CargosModels>> getAllCargos(@PageableDefault(
+            page = 0,size = 10,sort = "id",direction = Sort.Direction.ASC) Pageable pageable){
+        return ResponseEntity.status(HttpStatus.OK).body(cargosServices.findAll(pageable));
     }
 
     @GetMapping("/{id}")
@@ -59,5 +63,23 @@ public class CargosController {
         }
         cargosServices.delete(cargosModelsOptional.get());
         return ResponseEntity.status(HttpStatus.OK).body("Cargo EXCLUIDO com sucesso!!!");
+    }
+
+    @PutMapping("{/id}")
+    public ResponseEntity<Object> updateCargos(@PathVariable(value = "id")long id,
+                                               @RequestBody @Valid CargosDto cargosDto){
+        Optional<CargosModels> cargosModelsOptional = cargosServices.findById(id);
+        if (!cargosModelsOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cargo NÃO localizado");
+        }
+        var cargosModel = new CargosModels();       //opção para não setar muitos campos
+        BeanUtils.copyProperties(cargosDto,cargosModel);        //setar apenas os não alteraveis
+        cargosModel.setIdcargos(cargosModelsOptional.get().getIdcargos());
+
+//        var cargosModel = cargosModelsOptional.get();
+//        cargosModel.setNomeCargo(cargosDto.getNomeCargo());
+//        cargosModel.setValorMin(cargosDto.getValorMin());
+//        cargosModel.setValorMax(cargosDto.getValorMax());
+        return ResponseEntity.status(HttpStatus.OK).body(cargosServices.save(cargosModel));
     }
 }

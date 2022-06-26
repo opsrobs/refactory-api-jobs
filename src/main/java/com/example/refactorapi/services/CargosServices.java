@@ -1,6 +1,8 @@
 package com.example.refactorapi.services;
 
 import com.example.refactorapi.models.CargosModels;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.example.refactorapi.repositories.CargosRepositorie;
 
@@ -27,8 +29,8 @@ public class CargosServices {
         return cargosRepositorie.existsByNomeCargo(nomeCargo);
     }
 
-    public List<CargosModels> findAll() {
-    return cargosRepositorie.findAll();
+    public Page<CargosModels> findAll(Pageable pageable) {
+    return cargosRepositorie.findAll(pageable);
     }
 
     public Optional<CargosModels> findById(long id) {
