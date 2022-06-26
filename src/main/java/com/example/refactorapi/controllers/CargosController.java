@@ -26,7 +26,7 @@ public class CargosController {
     @PostMapping
     public ResponseEntity<Object> saveCargos(@RequestBody @Valid CargosDto cargosDto){
         if (cargosServices.existsByNomeCargo(cargosDto.getNomeCargo())){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: This name has already been created!");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: This name has already been created!!");
         }
         var cargosModel = new CargosModels();
         System.err.println(cargosDto);
